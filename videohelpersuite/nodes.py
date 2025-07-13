@@ -249,6 +249,7 @@ class VideoCombine:
                 "format": (["image/gif", "image/webp"] + ffmpeg_formats, {'formats': format_widgets}),
                 "pingpong": ("BOOLEAN", {"default": False}),
                 "save_output": ("BOOLEAN", {"default": True}),
+                "use_subfix": ("BOOLEAN", {"default": True}),
             },
             "optional": {
                 "audio": ("AUDIO",),
@@ -278,6 +279,7 @@ class VideoCombine:
         format="image/gif",
         pingpong=False,
         save_output=True,
+        use_subfix=True,
         prompt=None,
         extra_pnginfo=None,
         audio=None,
@@ -470,7 +472,11 @@ class VideoCombine:
                     i_pix_fmt = 'rgba'
                 else:
                     i_pix_fmt = 'rgb24'
-            file = f"{filename}_{counter:05}.{video_format['extension']}"
+            # luoq--- 修改，支持不要后缀名
+            if use_subfix:
+                file = f"{filename}_{counter:05}.{video_format['extension']}"
+            else:
+                file = f"{filename}.{video_format['extension']}"
             file_path = os.path.join(full_output_folder, file)
             bitrate_arg = []
             bitrate = video_format.get('bitrate')
